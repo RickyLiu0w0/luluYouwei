@@ -23,6 +23,18 @@ rm.onStop(function (e) {
       var result = JSON.parse(res.data);
       filename = result['token'];
       console.log(result)
+      // 语音转换
+      wx.request({
+        url: 'http://47.100.56.186:80/recognize?K=' + num + '&f=' + filename,
+        method: "GET",
+        success: function (res) {
+          console.log(res)
+        },
+
+        fail: function (res) {
+          console.log("error")
+        }
+      })
     },
 
     fail: function (err) {
@@ -32,19 +44,6 @@ rm.onStop(function (e) {
   };
   wx.uploadFile(n);
 
-
-  // 语音转换
-  wx.request({
-    url: 'http://47.100.56.186:80/recognize?K=' + num + '&f=' + filename,
-    method: "GET",
-    success: function (res) {
-      console.log(res)
-    },
-
-    fail: function (res) {
-      console.log("error")
-    }
-  })
 
 }),
 Page({
