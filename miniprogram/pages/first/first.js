@@ -4,6 +4,7 @@ const app = getApp()
 
 var num = 0
 rm.onStop(function (e) {
+  var filename = '' // 返回文件名称
   var a = this;
   wx.showLoading({
     title: "正在识别..."
@@ -11,17 +12,40 @@ rm.onStop(function (e) {
 
   //上传逻辑
   var n = {
-    url: app.globalData.url + "upload",
+    url: "http://47.100.56.186/upload",
     filePath: e.tempFilePath,
-    name: "music",
+    name: "record",
     header: {
-      "Content-Type": "application/json"
+      "Content-Type": "multipart/form-data"
     },
     success: function (res) {
       console.log("上传成功！")
+      var result = JSON.parse(res.data);
+      filename = result['token'];
+      console.log(result)
+    },
+
+    fail: function (err) {
+      var result = JSON.parse(err.data);
+      console(result)
     }
   };
   wx.uploadFile(n);
+
+
+  // 语音转换
+  wx.request({
+    url: 'http://47.100.56.186:80/recognize?K=' + num + '&f=' + filename,
+    method: "GET",
+    success: function (res) {
+      console.log(res)
+    },
+
+    fail: function (res) {
+      console.log("error")
+    }
+  })
+
 }),
 Page({
   data: {
@@ -94,7 +118,7 @@ Page({
       state: "录音中"
     }),
     rm.start({
-      format: "mav",
+      format: "mp3",
       sampleRate: 32e3,
       encodeBitRate: 192e3
     }), 
