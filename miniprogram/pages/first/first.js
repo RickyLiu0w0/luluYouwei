@@ -3,48 +3,68 @@ const innerAudioContext = wx.createInnerAudioContext()
 const app = getApp()
 
 var num = 0
-rm.onStop(function (e) {
-  var filename = '' // 返回文件名称
-  var a = this;
-  wx.showLoading({
-    title: "正在识别..."
+
+function wxPromisify(functionName, params) {
+  return new Promise((resolve, reject) => {
+    wx[functionName]({
+      ...params,
+      success: res => resolve(res),
+      fail: res => reject(res)
+    });
   });
+}
 
-  //上传逻辑
-  var n = {
-    url: "http://47.100.56.186/upload",
-    filePath: e.tempFilePath,
-    name: "record",
-    header: {
-      "Content-Type": "multipart/form-data"
-    },
-    success: function (res) {
-      console.log("上传成功！")
-      var result = JSON.parse(res.data);
-      filename = result['token'];
-      console.log(result)
-      // 语音转换
-      wx.request({
-        url: 'http://47.100.56.186:80/recognize?K=' + num + '&f=' + filename,
-        method: "GET",
-        success: function (res) {
-          console.log(res)
-        },
+// 显示圈圈
+function showLoading(params={}) {
+  return wxPromisify('showLoading', params);
+}
 
-        fail: function (res) {
-          console.log("error")
-        }
-      })
-    },
+// 上传文件
+function uploadFile(params = {}) {
+  return wxPromisify('uploadFile', params);
+}
 
-    fail: function (err) {
-      var result = JSON.parse(err.data);
-      console(result)
+// 分析
+function request(params = {}) {
+  return wxPromisify('request', params);
+}
+
+// 关闭圈圈
+function hideLoading(params = {}) {
+  return wxPromisify('hideLoading', params);
+}
+
+
+rm.onStop(function (e) {
+  showLoading({
+    title: "正在识别..."
+  }).then(res => {
+    console.log('showLoading --->', res);
+    return uploadFile({
+        url: "http://47.100.56.186/upload",
+        filePath: e.tempFilePath,
+        name: "record",
+        header: {
+          "Content-Type": "multipart/form-data"
+      }
+    });
+  }).then(res => {
+    console.log('uploadFile --->', res);
+    var result = JSON.parse(res.data);
+    var filename = filename = result['token'];
+    return request({
+      url: 'http://47.100.56.186:80/recognize?K=' + num + '&f=' + filename,
+      method: "GET"
     }
-  };
-  wx.uploadFile(n);
-
-
+    );
+  }).then(res => {
+    console.log('request --->', res); // 识别结果在这里 res.date
+    return hideLoading();
+  }).then(res => {
+    console.log('文件识别完毕');
+  }).catch(err => {
+    console.log(err);
+  });
 }),
 Page({
   data: {
