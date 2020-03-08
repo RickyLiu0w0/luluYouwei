@@ -1,7 +1,14 @@
 const rm = wx.getRecorderManager()
 const innerAudioContext = wx.createInnerAudioContext()
 const app = getApp()
-
+// var textData = [{ "person": 0, "text": "中文0" }, 
+// { "person": 1, "text": "中文1" },
+//   { "person": 1, "text": "中文2" },
+//   { "person": 0, "text": "中文3" },
+//   { "person": 1, "text": "中文4" },
+//   { "person": 0, "text": "中文5" },
+//   { "person": 0, "text": "中文6" }];
+var textData;
 var num = 0
 
 function wxPromisify(functionName, params) {
@@ -15,7 +22,7 @@ function wxPromisify(functionName, params) {
 }
 
 // 显示圈圈
-function showLoading(params={}) {
+function showLoading(params = {}) {
   return wxPromisify('showLoading', params);
 }
 
@@ -41,11 +48,11 @@ rm.onStop(function (e) {
   }).then(res => {
     console.log('showLoading --->', res);
     return uploadFile({
-        url: "http://47.100.56.186/upload",
-        filePath: e.tempFilePath,
-        name: "record",
-        header: {
-          "Content-Type": "multipart/form-data"
+      url: "http://47.100.56.186/upload",
+      filePath: e.tempFilePath,
+      name: "record",
+      header: {
+        "Content-Type": "multipart/form-data"
       }
     });
   }).then(res => {
@@ -58,7 +65,10 @@ rm.onStop(function (e) {
     }
     );
   }).then(res => {
-    console.log('request --->', res); // 识别结果在这里 res.date
+    console.log('request --->', res); // 识别结果在这里 res.data
+    textData=res.data;
+
+
     return hideLoading();
   }).then(res => {
     console.log('文件识别完毕');
@@ -66,6 +76,7 @@ rm.onStop(function (e) {
     console.log(err);
   });
 }),
+///////////////////////////////////////////////////////
 Page({
   data: {
     /**
@@ -79,10 +90,10 @@ Page({
     isDot: "block",
     isTouchStart: false,
     isTouchEnd: false,
-    state: '开始录音',
+    state: '长按录音',
     touchStart: 0,
-    touchEnd: 0
-
+    touchEnd: 0,
+    resultData:"",
   },
   bindPickerChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value),
@@ -156,8 +167,10 @@ Page({
           //输出文件
           animationData: n.animation2.export(),
           showPg: false,
-        })));
-        //console.log("输出文件：",animationData)
+        }),
+        console.log("n.animation2.export()", n.animation2.export())
+        ));
+        
     }, 10);
   }
   },
@@ -183,4 +196,11 @@ Page({
     })
     }
   },
-})
+}
+)
+
+
+//textData数据类型：[{ "person": 0, "text": "中文" }]
+
+
+module.exports =  {textData}
