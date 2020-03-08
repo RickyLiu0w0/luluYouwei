@@ -1,45 +1,36 @@
 const app = getApp()
-const {textData} = require('../first/first.js')
-
-console.log("textData:",textData)
-// textData = [{ "person": 0, "text": "中文0" },
-// { "person": 1, "text": "中文1" },
-// { "person": 1, "text": "中文2" },
-// { "person": 0, "text": "中文3" },
-// { "person": 1, "text": "中文4" },
-// { "person": 0, "text": "中文5" },
-// { "person": 0, "text": "中文6" }];
+const getTextData = require('../first/first.js')
+//var textData = getTextData().then(textData=>textData)
 
 
-function translate(textData){
-  var text="";
-  //console.log("textData.length:", textData.length);
+function translate(textData) {
+  var text = "";
   console.log("textData:", textData)
-  for (var i=0;i<textData.length;i++) {
-    console.log("i:",i)
-    console.log("text:",text)
-    text += textData[i]["person"] + " : " + textData[i]["text"]+'\n';
+  console.log("textData.length:", textData.length);
+
+  for (var i = 0; i < textData.length; i++) {
+    console.log("i:", i)
+    console.log("text:", text)
+    text += textData[i]["person"] + " : " + textData[i]["text"] + '\n';
   }
-  
-  // for (var i of textData) {
-  //   console.log("i:", i)
-  //   console.log("text:", text)
-  //   text += textData[i]["person"] + " : " + textData[i]["text"] + '\n';
-  // }
-
-
-
   return text;
 }
 
-
-
 Page({
-  data:{
-    textValue: translate(textData),
+  data: {
+    textValue: "",
   },
-
-  update:function(e){
+  onLoad: function () {
+    console.log("调用onload:")
+    getTextData().then(textData => {
+      console.log("textData：：：：：:", textData)
+      this.setData({
+        textValue: translate(textData)
+      })
+      //this.data.textValue = translate(textData)
+    });
+  },
+  update: function (e) {
     console.log("输出e.detail.value：", e.detail.value)
     this.setData({
       textValue: e.detail.value
@@ -59,16 +50,5 @@ Page({
       }
     });
   }
-  
-  
-
-
-
 
 })
-
-
-
-
-
-
