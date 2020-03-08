@@ -1,13 +1,7 @@
 const rm = wx.getRecorderManager()
 const innerAudioContext = wx.createInnerAudioContext()
 const app = getApp()
-// var textData = [{ "person": 0, "text": "中文0" }, 
-// { "person": 1, "text": "中文1" },
-//   { "person": 1, "text": "中文2" },
-//   { "person": 0, "text": "中文3" },
-//   { "person": 1, "text": "中文4" },
-//   { "person": 0, "text": "中文5" },
-//   { "person": 0, "text": "中文6" }];
+
 var textData;
 var num = 0
 
@@ -41,7 +35,7 @@ function hideLoading(params = {}) {
   return wxPromisify('hideLoading', params);
 }
 
-
+// 此函数由第二页onLoad调用
 function getTextData() {
   return new Promise((resolve, reject) => {
     rm.onStop(e => {
@@ -141,12 +135,14 @@ Page({
    */
   recordStart: function (e) {
     if (this.data.index <= 0) {
+      wx.vibrateLong(); // 使手机发生较长时间的振动（400 ms)
       wx.showToast({
         title: '请选择说话人数',
         icon: "none",
         duration: 1000,
       });
     } else {
+      wx.vibrateShort(); // 使手机发生较短时间的振动（15 ms）。仅在 iPhone 7 / 7 Plus 以上及 Android 机型生效
       var n = this;
       this.setData({
         state: "录音中"
@@ -181,24 +177,29 @@ Page({
   },
   /**
    * 长按录音结束
+   * rm.stop() 与rm.onStop(function callback) 是
+   * 先执行rm.stop()成功后执行function callback，
+   * rm.onStop(function callback)写后的条件是保证rm.stop()
+   * 尚未执行结束，如果rm.stop()执行速度很快，早早就结束了，
+   * 那么这个时候再rm.onStop(function callback)也冇用了
    */
   recordTerm: function (e) {
     if (this.data.index > 0) {
-
-
-      rm.stop(), this.setData({
-        isTouchEnd: true,
-        isTouchStart: false,
-        touchEnd: e.timeStamp,
-        showPg: false,
-        value: 100
-      }), clearInterval(this.timer);
       wx.navigateTo({
         url: '../second/second',
       })
       this.setData({
         state: "开始录音"
-      })
+      });
+      rm.stop();
+      this.setData({
+        isTouchEnd: true,
+        isTouchStart: false,
+        touchEnd: e.timeStamp,
+        showPg: false,
+        value: 100
+      });
+      clearInterval(this.timer);
     }
   },
 })
