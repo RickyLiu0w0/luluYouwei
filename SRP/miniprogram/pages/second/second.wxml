@@ -1,0 +1,10 @@
+<view class="con">
+  <image class="container" src="../../images/interface2.jpg" ></image>
+<view class="button">
+  <button class="cu-btn round bg-red my-btn" bindtap='copyBtn'>一键复制</button>
+</view>
+<view class="bg-white text_background">
+  <textarea  class="text" placeholder="识别结果" maxlength="-1" auto-focus="true" fixed="true"  bindconfirm="update" value="{{textValue}}"/>
+</view>
+
+</view>
