@@ -1,0 +1,16 @@
+<view class="con">
+  <image class="container" src="../../images/interface1.1.jpg" ></image>
+  <view class="section">
+      <view class="section__title"></view>
+      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+        <view class="cu-item">
+        <text class="cuIcon-group_fill lg text-gray myIcon"></text>
+        <text>选择人数：{{array[index]}}
+        </text>
+        </view>
+      </picker>
+    </view>
+<view class="button">
+  <button bindtouchstart="recordStart" bindtouchend="recordTerm" class="cu-btn round bg-red my-btn">{{state}}</button>
+</view>
+</view>
