@@ -6,21 +6,44 @@
   height: 100%;
   opacity:0.81;
 }
-
 /*选择器  */
-.section__title{
-  margin-bottom: 20rpx;
-}
 .section{
   margin: 50rpx 0;
-  font-size: 30rpx;
-
+  font-size: 39rpx;
   opacity:1.0;
   position:absolute;
-  top:50%;
-  left:38%;
+  top:47%;
+  left:33%;
 }
-.myIcon{
+.scImg{
+  margin-top: 20rpx;
+  width: 40rpx;
+  height: 40rpx;
+}
+/* 功能介绍 */
+.intoduction{
+  margin: 50rpx 0;
+  position:absolute;
+  top:39%;
+  left:30%;
+}
+.bt1{
+  background-color:transparent;  
+  font-size: 39rpx;
+  display: flex; 
+  flex-direction: row;
+}
+.btImg {
+  margin-top: 20rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+.bt1::after{
+  border: 0;
+}
+
+/* .myIcon{
   height:50rpx;
   width:200rpx
-}
+} */
+

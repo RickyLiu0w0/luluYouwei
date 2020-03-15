@@ -100,6 +100,16 @@ Page({
         index: e.detail.value
       })
   },
+  showtip:function(){
+    wx.showModal({
+      title: '功能介绍',
+      content: '1.选择对话人数\r\n2.长按录音按钮\r\n3.语音智能识别\r\n4.修改内容一键复制',
+      showCancel: true,
+      confirmText: '知道啦',
+      confirmColor:'green',
+      showCancel:false,
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -189,7 +199,7 @@ Page({
         url: '../second/second',
       })
       this.setData({
-        state: "开始录音"
+        state: "长按录音"
       });
       rm.stop();
       this.setData({

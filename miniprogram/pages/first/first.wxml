@@ -1,16 +1,20 @@
 <view class="con">
-  <image class="container" src="../../images/interface1.1.jpg" ></image>
+  <image class="container" src="../../images/interface3.0.jpg" ></image>
   <view class="section">
-      <view class="section__title"></view>
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
         <view class="cu-item">
-        <text class="cuIcon-group_fill lg text-gray myIcon"></text>
-        <text>选择人数：{{array[index]}}
-        </text>
+        <image class="scImg" src="../../images/flower.png"></image>
+        <text>选择人数：{{array[index]}}</text>
         </view>
       </picker>
-    </view>
-<view class="button">
-  <button bindtouchstart="recordStart" bindtouchend="recordTerm" class="cu-btn round bg-red my-btn">{{state}}</button>
-</view>
+  </view>
+  <view class="intoduction">
+    <button class="bt1" bindtap="showtip"> 
+      <image class="btImg" src="../../images/grass.png"></image>
+      <view>功能介绍</view>
+    </button>
+  </view>
+  <view class="button">
+    <button bindtouchstart="recordStart" bindtouchend="recordTerm" class="cu-btn round bg-red my-btn">{{state}}</button>
+  </view>
 </view>

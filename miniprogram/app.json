@@ -2,7 +2,6 @@
   "pages": [
     "pages/first/first",
     "pages/second/second"
-    
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -12,5 +11,5 @@
     "backgroundColor": "#f5f5f5",
     "navigationStyle": "custom"
   },
-  "sitemapLocation": "sitemap96.json"
+  "sitemapLocation": "sitemap.json"
 }
